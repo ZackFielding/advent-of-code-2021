@@ -3,11 +3,12 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 #include "binary_DLL.hpp"
 
 void createBinaryDLL(std::vector<char*>*, const char);
 void freeListHeap(binary_DLL*);
 void printBinaryDLLArrays(binary_DLL*, const char);
-void traverseRemove(binary_DLL&, const int, const char);
+void traverseRemove(const char*, binary_DLL&, const int, const char);
 
 #endif

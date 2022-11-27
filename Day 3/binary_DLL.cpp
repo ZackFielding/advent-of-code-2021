@@ -2,11 +2,7 @@
 #include <iostream>
 
 binary_DLL::binary_DLL(const char head_char) : carray_ptr {nullptr}, next {nullptr}, previous {nullptr}
-{
-    if (head_char == 'O') OGR_previous_DLL = this;
-    else if (head_char == 'C') CO2SR_previous_DLL = this;
-    else std::clog << "Temporary instance of binary_DLL constructed ... no static prevous pointer set.\n";
-}
+{ (head_char == 'O') ? OGR_previous_DLL = this : CO2SR_previous_DLL = this; }
 
 binary_DLL::binary_DLL(char* arg_carray_ptr, const char head_char) : carray_ptr {arg_carray_ptr}, next {nullptr}, previous {nullptr} 
 {

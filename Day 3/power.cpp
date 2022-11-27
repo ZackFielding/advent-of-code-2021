@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <cmath>
+#include <string>
 #include "binary_DLL.hpp"
 #include "part1.hpp"
 #include "part2.hpp"
@@ -47,10 +48,15 @@ int main()
 
         // loop through lists starting at char[1] and going to char [size-1]
             // run in parallel once working
+
+        int arr_idx {1};
+        while (arr_idx < char_arr_size-1 && OGR_head.OGR_size > 1) // while within char array range && >1 item is left in list
+            traverseRemove("Oxygen", OGR_head, arr_idx, l_return_int_as_char(gamma_vec, arr_idx));
+
         for (int i {1}; i < char_arr_size-1; ++i)
         {
-            traverseRemove(OGR_head, i, l_return_int_as_char(gamma_vec, i));
-            traverseRemove(CO2SR_head, i, l_return_int_as_char(epsilon_vec, i));
+            traverseRemove("Oxygen", OGR_head, i, l_return_int_as_char(gamma_vec, i));
+            traverseRemove("CO2", CO2SR_head, i, l_return_int_as_char(epsilon_vec, i));
         }
 
          // free heap-allocated lists before list-heads are popped
