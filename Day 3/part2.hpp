@@ -8,5 +8,6 @@
 void createBinaryDLL(std::vector<char*>*, const char);
 void freeListHeap(binary_DLL*);
 void printBinaryDLLArrays(binary_DLL*, const char);
+void traverseRemove(binary_DLL&, const int, const char);
 
 #endif

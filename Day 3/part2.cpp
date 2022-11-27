@@ -46,3 +46,9 @@ void printBinaryDLLArrays(binary_DLL* head, const char head_char)
     std::cout << "Size of list: " 
         << ((head_char == 'O') ? head->OGR_size : head->CO2SR_size) << '\n'; 
 }
+
+void traverseRemove(binary_DLL& head, const int idx, const char ref_char)
+{
+    // loop through list accessing idx-th carray value
+        // if value != ref_char -> remove from list && and correct list pointers 
+}

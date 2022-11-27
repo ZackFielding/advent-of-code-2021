@@ -36,17 +36,22 @@ int main()
         binary_DLL OGR_head {'O'};
         binary_DLL CO2SR_head {'C'};
          // return first idx as char character
-        auto l_gamma_0th_idx = [&]()->const char
-            {
-                if (gamma_vec.at(0) == 1) return '1';
-                else return '0';
-            };
+        auto l_return_int_as_char = [](const std::vector<int>& vec_of_carray, const int idx)->const char
+            { return (vec_of_carray.at(idx) == 1) ? '1' : '0'; };
 
             // create both OXYGEN and CO2 double linked lists based on most common 0th idx value
-        createBinaryDLL(&vec_of_char, l_gamma_0th_idx()); 
+        createBinaryDLL(&vec_of_char, l_return_int_as_char(gamma_vec, 0)); 
 
             // print all arrays [TEST]
         //printBinaryDLLArrays(&CO2SR_head, 'C');
+
+        // loop through lists starting at char[1] and going to char [size-1]
+            // run in parallel once working
+        for (int i {1}; i < char_arr_size-1; ++i)
+        {
+            traverseRemove(OGR_head, i, l_return_int_as_char(gamma_vec, i));
+            traverseRemove(CO2SR_head, i, l_return_int_as_char(epsilon_vec, i));
+        }
 
          // free heap-allocated lists before list-heads are popped
         freeListHeap(&OGR_head);
