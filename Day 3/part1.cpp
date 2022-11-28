@@ -54,5 +54,9 @@ double findFinalBinary(std::vector<char*>* vec, const std::int8_t arr_size, std:
             epsilon_vec.at(idx) = 1;
         }
     }
+    std::cout << "Gamma binary: ";
+    for (const auto& g : gamma_vec) std::cout << g << ' ';
+    std::cout << '\n';
+
     return (toBinary(&gamma_vec) * toBinary(&epsilon_vec));
 }

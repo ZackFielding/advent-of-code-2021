@@ -43,25 +43,25 @@ int main()
             // create both OXYGEN and CO2 double linked lists based on most common 0th idx value
         createBinaryDLL(&vec_of_char, l_return_int_as_char(gamma_vec, 0)); 
 
-            // print all arrays [TEST]
-        //printBinaryDLLArrays(&CO2SR_head, 'C');
-
-        // loop through lists starting at char[1] and going to char [size-1]
-            // run in parallel once working
-
-        int arr_idx {1};
-        while (arr_idx < char_arr_size-1 && OGR_head.OGR_size > 1) // while within char array range && >1 item is left in list
-            traverseRemove("Oxygen", OGR_head, arr_idx, l_return_int_as_char(gamma_vec, arr_idx));
-
-        for (int i {1}; i < char_arr_size-1; ++i)
+        int O2_idx {1};
+        while (OGR_head.OGR_size > 1) // while within char array range && >1 item is left in list
         {
-            traverseRemove("Oxygen", OGR_head, i, l_return_int_as_char(gamma_vec, i));
-            traverseRemove("CO2", CO2SR_head, i, l_return_int_as_char(epsilon_vec, i));
+            traverseRemove("Oxygen", OGR_head, O2_idx, l_return_int_as_char(gamma_vec, O2_idx));
+            ++O2_idx;
         }
+        
+        int CO2_idx {1};
+        while (CO2SR_head.CO2SR_size > 1)
+        {
+            traverseRemove("CO2", CO2SR_head, CO2_idx, l_return_int_as_char(epsilon_vec, CO2_idx));
+            ++CO2_idx;
+        }
+        
+        printBinaryDLLArrays(&CO2SR_head, 'C');
 
-         // free heap-allocated lists before list-heads are popped
-        freeListHeap(&OGR_head);
-        freeListHeap(&CO2SR_head); 
+        // free heap-allocated lists before list-heads are popped ... ensure there are nodes left to be freed
+        if (OGR_head.OGR_size > 0) freeListHeap(&OGR_head);
+        if (CO2SR_head.CO2SR_size > 0) freeListHeap(&CO2SR_head); 
     }
 
     // free heap alloc

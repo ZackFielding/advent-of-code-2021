@@ -19,17 +19,21 @@ void createBinaryDLL(std::vector<char*>* vec_of_char, const char gamma_0th_idx)
 
 void freeListHeap(binary_DLL* head)
 {
+    
     binary_DLL* free_me = new binary_DLL('T'); // temp to free
-    free_me = head->next; // assign to 1st non-head obj node
-    free_me = free_me->next; // skip to 2nd node (deleting previous obj .. head is NOT a heap alloc)
+    free_me = head->next;
+    binary_DLL* cache_next_ptr {nullptr};
     unsigned free_counter {0};
-    while (free_me != nullptr) // if previous is not a nullptr (i.e., end of list) 
+
+    while (free_me->next != nullptr) 
     {
-        delete free_me->previous;  // delete obj behind
-        free_me = free_me->next; // set free me to next obj
+        cache_next_ptr = free_me->next; // cache ptr to next prior to mem dealloc
+        delete free_me; 
+        free_me = cache_next_ptr;
         ++free_counter;
+        //std::cout << free_counter << " ... ";
     }
-    delete free_me;
+    delete free_me; // last item of list
     std::clog << "Number of nodes with heap memory freed: " << free_counter << '\n';
 }
 
@@ -57,11 +61,16 @@ void traverseRemove(const char* outcome_str, binary_DLL& head, const int idx, co
     binary_DLL* traversal_binary_DLL = new binary_DLL{'T'};
     binary_DLL* updated_next {nullptr}, *updated_previous {nullptr};
     unsigned node_removal_count {0};
-    unsigned* copy_size_ptr = 
-        [&head, outcome_str]()->unsigned*
-            {return (std::strcmp(outcome_str, "Oyxgen")) ? &head.OGR_size : &head.CO2SR_size; }();
 
-    while (temp_binary_DLL != nullptr)
+     // const ptr to size member ... determine what size member to decrement
+    unsigned* const copy_size_ptr = 
+        [&head, outcome_str]()->unsigned*
+            {
+                const char oxygen_str[] {"Oxygen"};
+                return (std::strcmp(outcome_str, oxygen_str) == 0) ? &head.OGR_size : &head.CO2SR_size; 
+            }();
+
+    while (temp_binary_DLL->next != nullptr)
     {
         if (temp_binary_DLL->carray_ptr[idx] != ref_char)
         {
@@ -69,23 +78,37 @@ void traverseRemove(const char* outcome_str, binary_DLL& head, const int idx, co
             updated_next = temp_binary_DLL->next; // copy of ptr to next obj in list
             traversal_binary_DLL = temp_binary_DLL->previous; // move -1 in list
             traversal_binary_DLL->next = updated_next; // assign -1 obj next to n+1 obj ref
-            temp_binary_DLL->next = nullptr; // null current obj next ptr
 
             updated_previous = temp_binary_DLL->previous; // same steps as above but for n+1 previous ptr
             traversal_binary_DLL = temp_binary_DLL->next;
-            temp_binary_DLL->previous = updated_previous;
-            temp_binary_DLL->previous = nullptr; // null prev
+            traversal_binary_DLL->previous = updated_previous;
+            //temp_binary_DLL->previous = nullptr; // null prev
 
             // free memory assoc. with obj that now points nowhere
             delete temp_binary_DLL;
             temp_binary_DLL = updated_next; // cycle to next obj
             ++node_removal_count;
             --(*copy_size_ptr); // decrement correct size ptr
-        }
-        temp_binary_DLL = temp_binary_DLL->next; // cycle to next obj if reference match
+        } 
+        else temp_binary_DLL = temp_binary_DLL->next; // cycle to next obj if reference match
     }
 
-    delete temp_binary_DLL;
+        // need to check last item separately
+    if (temp_binary_DLL->carray_ptr[idx] != ref_char)
+    {
+        traversal_binary_DLL = temp_binary_DLL->previous; // traverse back to 2nd last node
+        traversal_binary_DLL->next = nullptr; // set next to null ptr
+        delete temp_binary_DLL; // dealloc
+        ++node_removal_count;
+        --(*copy_size_ptr);
+    } else 
+    {
+        temp_binary_DLL = nullptr; // didn't ended up removing last node -> set to nullptr
+        delete temp_binary_DLL;
+    }
+
+    traversal_binary_DLL = nullptr;
     delete traversal_binary_DLL;
-    std::clog << "Number of items removed from " << outcome_str << " list: " << node_removal_count << '\n';
+    std::clog << "Number of items removed from " << outcome_str << " list: " << node_removal_count 
+        << " ... size of list is now: " << *copy_size_ptr << '\n';
 }
